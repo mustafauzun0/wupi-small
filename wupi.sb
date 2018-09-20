@@ -1,0 +1,72 @@
+GraphicsWindow.Title = "Wupi"
+GraphicsWindow.BackgroundColor = "White"
+GraphicsWindow.Width = 520
+GraphicsWindow.Height = 300
+GraphicsWindow.CanResize = "False"
+GraphicsWindow.Top = (Desktop.Height / 2) - (GraphicsWindow.Height / 2)
+GraphicsWindow.Left = (Desktop.Width / 2) - (GraphicsWindow.Width / 2)
+
+txt_ara = Controls.AddTextBox(GraphicsWindow.Width /3 ,10)
+Controls.SetSize(txt_ara,160,25)
+
+btn_ara = Controls.AddButton("Yenile", GraphicsWindow.Width /1.580,10)
+Controls.SetSize(btn_ara,60,25)
+
+btn_kaydet = Controls.AddButton("Kaydet", GraphicsWindow.Width/1.330,10)
+Controls.SetSize(btn_kaydet,60,25)
+
+btn_arkaplan =  Controls.AddButton("Arka Plan",GraphicsWindow.Width/5.200,10)
+Controls.SetSize(btn_arkaplan,72,25)
+
+Controls.ButtonClicked = Butonlar
+
+Sub Butonlar
+  If (Controls.LastClickedButton = btn_ara) Then
+    Ara()
+  EndIf
+  
+  If (Controls.LastClickedButton = btn_kaydet) Then
+    Kaydet()
+  EndIf
+  
+  If (Controls.LastClickedButton = btn_arkaplan) Then
+    Arkaplan()
+  EndIf
+EndSub
+
+Sub Ara
+  flckr = Flickr.GetRandomPicture(Controls.GetTextBoxText(txt_ara))
+  
+  If (flckr = "") Then
+    flckr = Flickr.GetPictureOfMoment()
+      If (flckr = "") Then
+        GraphicsWindow.ShowMessage("İnternet Bağlantınızı Kotrol Edin","Uyarı")
+      EndIf 
+  EndIf
+  
+  alt = 45
+  GraphicsWindow.DrawResizedImage(flckr, 0, alt, GraphicsWindow.Width, GraphicsWindow.Height-alt)
+EndSub
+
+Sub Kaydet
+  kaydet = Network.DownloadFile(flckr)
+  
+For i = 1 To Text.GetLength(flckr)
+  ters = Text.GetSubText(flckr,i,1) + ters
+EndFor
+
+bulisim = Text.GetIndexOf(ters,"/")
+bulisim =Text.GetLength(flckr) - bulisim
+
+If (Text.GetLength(flckr) > 0) Then
+resim = File.CopyFile(kaydet,Program.Directory+"/Resimler/"+Text.GetSubTextToEnd(flckr,bulisim+1))
+File.DeleteFile(kaydet)
+GraphicsWindow.ShowMessage("Resim Kaydedildi: "+Program.Directory+"\Resimler\"+Text.GetSubTextToEnd(flckr,bulisim+2),"Uyarı")
+EndIf
+EndSub
+
+Sub Arkaplan
+  Desktop.SetWallPaper(flckr)
+EndSub
+
+GraphicsWindow.Show()
