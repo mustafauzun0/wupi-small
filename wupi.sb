@@ -51,18 +51,18 @@ EndSub
 Sub Kaydet
   kaydet = Network.DownloadFile(flckr)
   
-For i = 1 To Text.GetLength(flckr)
-  ters = Text.GetSubText(flckr,i,1) + ters
-EndFor
+  For i = 1 To Text.GetLength(flckr)
+    ters = Text.GetSubText(flckr,i,1) + ters
+  EndFor
 
-bulisim = Text.GetIndexOf(ters,"/")
-bulisim =Text.GetLength(flckr) - bulisim
+  bulisim = Text.GetIndexOf(ters,"/")
+  bulisim =Text.GetLength(flckr) - bulisim
 
-If (Text.GetLength(flckr) > 0) Then
-resim = File.CopyFile(kaydet,Program.Directory+"/Resimler/"+Text.GetSubTextToEnd(flckr,bulisim+1))
-File.DeleteFile(kaydet)
-GraphicsWindow.ShowMessage("Resim Kaydedildi: "+Program.Directory+"\Resimler\"+Text.GetSubTextToEnd(flckr,bulisim+2),"Uyarı")
-EndIf
+  If (Text.GetLength(flckr) > 0) Then
+    resim = File.CopyFile(kaydet,Program.Directory+"/Resimler/"+Text.GetSubTextToEnd(flckr,bulisim+1))
+    File.DeleteFile(kaydet)
+    GraphicsWindow.ShowMessage("Resim Kaydedildi: "+Program.Directory+"\Resimler\"+Text.GetSubTextToEnd(flckr,bulisim+2),"Uyarı")
+  EndIf
 EndSub
 
 Sub Arkaplan
